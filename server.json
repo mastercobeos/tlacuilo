@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.mastercobeos/tlacuilo",
+  "title": "Tlacuilo",
+  "description": "35 pay-per-call tools for AI agents over x402 (USDC): web, security, markets, SEC, papers, Mexico",
+  "version": "1.0.0",
+  "websiteUrl": "https://tlacuilo-jet.vercel.app",
+  "repository": {
+    "url": "https://github.com/mastercobeos/tlacuilo",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://tlacuilo-jet.vercel.app/mcp"
+    }
+  ]
+}
