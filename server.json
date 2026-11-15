@@ -7,7 +7,8 @@
   "websiteUrl": "https://tlacuilo-jet.vercel.app",
   "repository": {
     "url": "https://github.com/mastercobeos/tlacuilo",
-    "source": "github"
+    "source": "github",
+    "id": "1458337200"
   },
   "remotes": [
     {
