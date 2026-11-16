@@ -219,7 +219,7 @@ Prices are per call, in USD, settled in USDC. Every tool is documented with para
 
 ## Sources and data policy
 
-- Each tool names its source in the catalog: DuckDuckGo, headless Chromium, BrasilAPI (Receita Federal), INSEE / Annuaire des Entreprises, VIES, Zippopotam (GeoNames), CoinGecko, European Central Bank via Frankfurter, Open-Meteo, SEC EDGAR, OpenAlex, Crossref/DataCite, ClinicalTrials.gov, Federal Register API, Polymarket Gamma API, OSV and deps.dev, RDAP registries, DNS-over-HTTPS public resolvers, GoPlus, RugCheck, DexScreener, Coinbase Bazaar, and for Mexico: SAT, Banco de México (SIE), INEGI (UMA, DENUE), CONASAMI, CNBV calendar and the Correos de México postal catalog.
+- Each tool names its source in the catalog: Brave Search / Bing, headless Chromium, BrasilAPI (Receita Federal), INSEE / Annuaire des Entreprises, VIES, Zippopotam (GeoNames), CoinGecko, European Central Bank via Frankfurter, Open-Meteo, SEC EDGAR, OpenAlex, Crossref/DataCite, ClinicalTrials.gov, Federal Register API, Polymarket Gamma API, OSV and deps.dev, RDAP registries, DNS-over-HTTPS public resolvers, GoPlus, RugCheck, DexScreener, Coinbase Bazaar, and for Mexico: SAT, Banco de México (SIE), INEGI (UMA, DENUE), CONASAMI, CNBV calendar and the Correos de México postal catalog.
 - Tlacuilo sells **queries**, not datasets: postal codes and the 69-B list are served per lookup, never as a bulk download.
 - **If an upstream official source fails, the call returns `502` and the payment is not settled.** You only pay for an answer.
 - `rfc/validar`, `curp/validar`, `dias-habiles`, `uma`, `salario-minimo` and `iva` are computed or served from bundled official data; they do not call the source on each request.
