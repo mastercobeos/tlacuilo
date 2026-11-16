@@ -2,7 +2,7 @@
 
 **Tools, public data and official Mexican data for AI agents, paid per call with x402.**
 
-Tlacuilo is an HTTP API (and an MCP server) with 35 tools that an agent can call without an account, an API key or a subscription. Every endpoint answers `402 Payment Required` with its price; the agent pays a few cents in USDC on Base or Solana using the [x402 protocol](https://x402.org) and gets the answer in the same request. Prices run from $0.001 to $0.05 per call.
+Tlacuilo is an HTTP API (and an MCP server) with 45 tools that an agent can call without an account, an API key or a subscription. Every endpoint answers `402 Payment Required` with its price; the agent pays a few cents in USDC on Base or Solana using the [x402 protocol](https://x402.org) and gets the answer in the same request. Prices run from $0.001 to $0.05 per call.
 
 - Base URL: `https://tlacuilo-jet.vercel.app/api/v1`
 - Free machine-readable catalog: `https://tlacuilo-jet.vercel.app/api/v1`
@@ -88,7 +88,7 @@ The wrapped `fetch` handles the 402 round-trip transparently: it reads `Payment-
 
 ### 3. Use it as an MCP server
 
-The MCP server at `https://tlacuilo-jet.vercel.app/mcp` (Streamable HTTP, no authentication) exposes the same 35 paid tools plus two free ones, `catalog` and `health`. Tool names are the HTTP paths with underscores (`web_read`, `sec_filings`, `banxico`, `uma`); path parameters become arguments. Payment travels inside MCP `_meta` (`x402/payment` and `x402/payment-response`) exactly as specified by `@x402/mcp`; a client wrapped with `@x402/mcp` pays automatically, with an optional approval hook per call.
+The MCP server at `https://tlacuilo-jet.vercel.app/mcp` (Streamable HTTP, no authentication) exposes the same 45 paid tools plus two free ones, `catalog` and `health`. Tool names are the HTTP paths with underscores (`web_read`, `sec_filings`, `banxico`, `uma`); path parameters become arguments. Payment travels inside MCP `_meta` (`x402/payment` and `x402/payment-response`) exactly as specified by `@x402/mcp`; a client wrapped with `@x402/mcp` pays automatically, with an optional approval hook per call.
 
 **Claude Code**
 
@@ -139,6 +139,9 @@ Prices are per call, in USD, settled in USDC. Every tool is documented with para
 | Tool | Price | What it does |
 | --- | --- | --- |
 | `GET /web/read` | $0.001 | Any public web page as clean, LLM-ready markdown (title, meta, language, main content; nav, ads and scripts removed). |
+| `GET /web/search` | $0.005 | Web search results as JSON: up to 30 organic results with title, URL, domain and snippet; region and recency filters; ads removed. |
+| `GET /web/render` | $0.02 | Render a page in a real headless Chromium with JavaScript executed; markdown, text or HTML. For SPAs, infinite scroll and client-side dashboards. |
+| `GET /web/screenshot` | $0.03 | Screenshot of a page after JavaScript runs (base64 JPEG/PNG), viewport up to 1920×2000, optional full page. |
 | `GET /web/tables` | $0.003 | Every HTML table on a page as JSON (headers, rows, records, parsed numbers, colspan/rowspan expanded); one table also as CSV. |
 | `GET /x402/find` | $0.01 | Which x402 API should I call for this task? Searches the Bazaar and ranks by evidence of real use (distinct payers, repeat calls, recency, price). |
 | `GET /token/verdict` | $0.02 | Token verdict for a Base contract or Solana mint: DEX data, security checks (GoPlus, RugCheck), red/green flags, one-word verdict. Not trading advice. |
@@ -170,6 +173,13 @@ Prices are per call, in USD, settled in USDC. Every tool is documented with para
 | `GET /papers/search` | $0.005 | Full-text search over 250M+ scholarly works in OpenAlex with abstracts, citations, open-access PDF links and DOIs. |
 | `GET /papers/cite` | $0.002 | BibTeX plus a formatted reference (APA, MLA, Chicago, IEEE, Harvard, Nature, AMA) for any DOI. |
 | `GET /clinical-trials/search` | $0.005 | ClinicalTrials.gov studies by condition, intervention, status, country and phase, with sponsor, enrollment, dates and summary. |
+| `GET /company/br/:cnpj` | $0.005 | Brazilian company record by CNPJ (Receita Federal): names, status, activities, address, partners, Simples/MEI flags. |
+| `GET /company/fr/search` | $0.005 | French companies from the official INSEE directory by name, SIREN or SIRET: legal form, NAF, headcount, head office, officers. |
+| `GET /vat/eu/:vat` | $0.005 | EU VAT number validation against VIES (27 member states + XI), with registered name and address when published. |
+| `GET /postal/:country/:code` | $0.002 | Postal code lookup for 60+ countries: places, state, coordinates. |
+| `GET /crypto/price` | $0.002 | Price, 24h change, market cap and volume of up to 25 coins by symbol or CoinGecko id, in any quote currency. |
+| `GET /fx/latest` | $0.001 | ECB reference exchange rates for ~30 currencies, latest or any business day since 1999, with optional amount conversion. |
+| `GET /weather` | $0.002 | Current weather and up to 16-day forecast for a city or coordinates, metric or imperial. |
 
 ### Mexico: basic official data
 
@@ -209,7 +219,7 @@ Prices are per call, in USD, settled in USDC. Every tool is documented with para
 
 ## Sources and data policy
 
-- Each tool names its source in the catalog: SEC EDGAR, OpenAlex, Crossref/DataCite, ClinicalTrials.gov, Federal Register API, Polymarket Gamma API, OSV and deps.dev, RDAP registries, DNS-over-HTTPS public resolvers, GoPlus, RugCheck, DexScreener, Coinbase Bazaar, and for Mexico: SAT, Banco de México (SIE), INEGI (UMA, DENUE), CONASAMI, CNBV calendar and the Correos de México postal catalog.
+- Each tool names its source in the catalog: DuckDuckGo, headless Chromium, BrasilAPI (Receita Federal), INSEE / Annuaire des Entreprises, VIES, Zippopotam (GeoNames), CoinGecko, European Central Bank via Frankfurter, Open-Meteo, SEC EDGAR, OpenAlex, Crossref/DataCite, ClinicalTrials.gov, Federal Register API, Polymarket Gamma API, OSV and deps.dev, RDAP registries, DNS-over-HTTPS public resolvers, GoPlus, RugCheck, DexScreener, Coinbase Bazaar, and for Mexico: SAT, Banco de México (SIE), INEGI (UMA, DENUE), CONASAMI, CNBV calendar and the Correos de México postal catalog.
 - Tlacuilo sells **queries**, not datasets: postal codes and the 69-B list are served per lookup, never as a bulk download.
 - **If an upstream official source fails, the call returns `502` and the payment is not settled.** You only pay for an answer.
 - `rfc/validar`, `curp/validar`, `dias-habiles`, `uma`, `salario-minimo` and `iva` are computed or served from bundled official data; they do not call the source on each request.
