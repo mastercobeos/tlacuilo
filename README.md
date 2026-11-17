@@ -2,7 +2,7 @@
 
 **Tools, public data and official Mexican data for AI agents, paid per call with x402.**
 
-Tlacuilo is an HTTP API (and an MCP server) with 45 tools that an agent can call without an account, an API key or a subscription. Every endpoint answers `402 Payment Required` with its price; the agent pays a few cents in USDC on Base or Solana using the [x402 protocol](https://x402.org) and gets the answer in the same request. Prices run from $0.001 to $0.05 per call.
+Tlacuilo is an HTTP API (and an MCP server) with 48 tools that an agent can call without an account, an API key or a subscription. Every endpoint answers `402 Payment Required` with its price; the agent pays a few cents in USDC on Base or Solana using the [x402 protocol](https://x402.org) and gets the answer in the same request. Prices run from $0.001 to $0.05 per call.
 
 - Base URL: `https://tlacuilo-jet.vercel.app/api/v1`
 - Free machine-readable catalog: `https://tlacuilo-jet.vercel.app/api/v1`
@@ -88,7 +88,7 @@ The wrapped `fetch` handles the 402 round-trip transparently: it reads `Payment-
 
 ### 3. Use it as an MCP server
 
-The MCP server at `https://tlacuilo-jet.vercel.app/mcp` (Streamable HTTP, no authentication) exposes the same 45 paid tools plus two free ones, `catalog` and `health`. Tool names are the HTTP paths with underscores (`web_read`, `sec_filings`, `banxico`, `uma`); path parameters become arguments. Payment travels inside MCP `_meta` (`x402/payment` and `x402/payment-response`) exactly as specified by `@x402/mcp`; a client wrapped with `@x402/mcp` pays automatically, with an optional approval hook per call.
+The MCP server at `https://tlacuilo-jet.vercel.app/mcp` (Streamable HTTP, no authentication) exposes the same 48 paid tools plus two free ones, `catalog` and `health`. Tool names are the HTTP paths with underscores (`web_read`, `sec_filings`, `banxico`, `uma`); path parameters become arguments. Payment travels inside MCP `_meta` (`x402/payment` and `x402/payment-response`) exactly as specified by `@x402/mcp`; a client wrapped with `@x402/mcp` pays automatically, with an optional approval hook per call.
 
 **Claude Code**
 
@@ -170,6 +170,9 @@ Prices are per call, in USD, settled in USDC. Every tool is documented with para
 | `GET /sec/filings` | $0.005 | SEC EDGAR filings by ticker or CIK, filterable by form (10-K, 10-Q, 8-K, 4, S-1, DEF 14A, 13F-HR), with document URLs. |
 | `GET /sec/facts` | $0.005 | XBRL company facts: latest annual and quarterly values for revenue, net income, EPS, assets, cash, shares and any us-gaap/dei concept. |
 | `GET /federal-register/search` | $0.003 | US Federal Register documents (rules, proposed rules, notices, presidential documents) by text, agency, type and date. |
+| `GET /sanctions/screen` | $0.005 | Screen a person, company, vessel or aircraft name against the OFAC SDN, UN Security Council and EU consolidated sanctions lists; fuzzy matching with scores, programs, aliases and the snapshot date. |
+| `POST /text/redact` | $0.003 | Detect and redact PII in text (emails, phones, SSNs, cards, IBANs, IPs, URLs, dates of birth, addresses, ID numbers, wallet addresses) with offsets; label, mask or remove. |
+| `GET /sec/fund-holdings` | $0.01 | Every holding of a US mutual fund or ETF from its latest SEC Form N-PORT filing, with weights, values, identifiers and fund totals; by ticker or series id. |
 | `GET /papers/search` | $0.005 | Full-text search over 250M+ scholarly works in OpenAlex with abstracts, citations, open-access PDF links and DOIs. |
 | `GET /papers/cite` | $0.002 | BibTeX plus a formatted reference (APA, MLA, Chicago, IEEE, Harvard, Nature, AMA) for any DOI. |
 | `GET /clinical-trials/search` | $0.005 | ClinicalTrials.gov studies by condition, intervention, status, country and phase, with sponsor, enrollment, dates and summary. |
